@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>🌟 Professional Contact Manager 🌟</title>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+<style>
+  /* Your existing styles (unchanged) */
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    background: linear-gradient(120deg, #b6eaff 0%, #d299c2 100%);
+    min-height: 100vh;
+  }
+  /* NAVBAR */
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    color: #fff;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 6px 16px rgba(60, 65, 110, 0.15);
+    z-index: 1000;
+    border-radius: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 2rem;
+    letter-spacing: 1.5px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .nav-logo {
+    max-height: 40px;
+    margin-right: 12px;
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-end;
+    flex: 1;
+  }
+  nav button {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 40px;
+    font-weight: bold;
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(90, 90, 110, 0.13);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .dashboardBtn {
+    background: linear-gradient(90deg, #5f27cd, #48dbfb);
+  }
+  .addBtn {
+    background: linear-gradient(90deg, #00b894, #00cec9);
+  }
+  .deleteBtn {
+    background: linear-gradient(90deg, #d63031, #ffeaa7);
+    color: #2d3436;
+  }
+  .updateBtn {
+    background: linear-gradient(90deg, #fdcb6e, #e17055);
+    color: #2d3436;
+  }
+  .logoutBtn {
+    background: linear-gradient(90deg, #636e72, #b2bec3);
+  }
+  .filterBtn {
+    background: linear-gradient(90deg, #8e44ad, #3498db);
+  }
+  nav button:hover {
+    box-shadow: 0 0 8px 2px #a29bfe;
+  }
+  /* Theme Floating Toggle Button */
+  #themeToggleBtn {
+    position: fixed;
+    top: 85px; 
+    right: 32px;
+    z-index: 3000;
+    width: 48px;
+    height: 48px;
+    background: #222;
+    color: #fffa65;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.14);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6em;
+    transition: background 0.2s, color 0.2s;
+    outline: none;
+  }
+  #themeToggleBtn:hover {
+    background: #fffa65;
+    color: #222;
+  }
+  body.dark-mode #themeToggleBtn {
+    background: #fffa65;
+    color: #232526;
+  }
+  body.dark-mode #themeToggleBtn i.fa-sun {
+    color: #232526;
+  }
+  body:not(.dark-mode) #themeToggleBtn i.fa-moon {
+    color: #fffa65;
+  }
+  /* PAGES */
+  .page {
+    display: none;
+    max-width: 800px;
+    margin: 120px auto 40px auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(60, 65, 110, 0.18);
+    padding: 36px 26px;
+    animation: fadeInUp 0.5s;
+  }
+  .active {
+    display: block;
+  }
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  h2 {
+    text-align: center;
+    color: #636e72;
+    margin-bottom: 16px;
+    letter-spacing: 1.2px;
+    font-size: 1.5rem;
+  }
+  .form-group {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .form-group i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6a11cb;
+    font-size: 1.1em;
+  }
+  input,
+  select {
+    padding: 12px 16px 12px 34px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #dfe6e9;
+    font-size: 1rem;
+    margin-bottom: 6px;
+    background: #f9fbfd;
+    outline: none;
+    box-shadow: 0 1px 3px rgba(160, 160, 160, 0.06);
+    transition: border 0.2s;
+    box-sizing: border-box;
+  }
+  input:focus,
+  select:focus {
+    border: 2px solid #6a11cb;
+    background: #f0f3fa;
+  }
+  button {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 20px;
+    cursor: pointer;
+    margin-top: 12px;
+    box-shadow: 0 2px 4px rgba(90, 90, 120, 0.09);
+    transition: background 0.17s, box-shadow 0.2s;
+  }
+  button:active {
+    opacity: 0.87;
+  }
+  .alert {
+    padding: 13px;
+    margin: 15px 0 2px 0;
+    border-radius: 9px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1rem;
+    display: none;
+    letter-spacing: 1px;
+  }
+  .success {
+    background: #dff9fb;
+    color: #009432;
+    box-shadow: 0 0 8px #b8e994;
+  }
+  .error {
+    background: #f7b3bb;
+    color: #b71c1c;
+    box-shadow: 0 0 8px #f7b3bb;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: #f1f2f6;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(120, 120, 150, 0.08);
+  }
+  th,
+  td {
+    padding: 13px 16px;
+    text-align: left;
+    border-bottom: 1px solid #dfe6e9;
+    font-size: 15px;
+  }
+  th {
+    background: linear-gradient(90deg, #48dbfb 0%, #6a11cb 100%);
+    color: #fff;
+    font-size: 1.08em;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+  }
+  td:first-child {
+    font-weight: 600;
+    letter-spacing: 0.7px;
+  }
+  tbody tr:nth-child(odd) {
+    background: #f9f9fb;
+  }
+  tbody tr:nth-child(even) {
+    background: #e8eaf6;
+  }
+  /* sort arrow */
+  th.sort-asc::after,
+  th.sort-desc::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 55%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+  }
+  th.sort-asc::after {
+    border-bottom-color: white;
+  }
+  th.sort-desc::after {
+    border-top-color: white;
+  }
+  /* Responsive */
+  @media (max-width: 600px) {
+    .page {
+      padding: 18px 10px;
+      margin: 100px 10px;
+    }
+    header {
+      flex-direction: column;
+      gap: 8px;
+      padding: 16px 8px;
+    }
+    nav {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .nav-logo {
+      max-height: 35px;
+    }
+    .login-logo {
+      max-width: 100px;
+    }
+    #themeToggleBtn {
+      top: 62px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      font-size: 1.3em;
+    }
+  }
+  /* DARK MODE STYLES */
+  body.dark-mode {
+    background: linear-gradient(120deg, #232526 0%, #414345 100%);
+    color: #f1f1f1;
+  }
+  body.dark-mode header {
+    background: linear-gradient(90deg, #232526, #414345);
+    color: #e1e1e1;
+  }
+  body.dark-mode nav button {
+    color: #f1f1f1;
+    box-shadow: 0 2px 4px rgba(30, 40, 60, 0.16);
+  }
+  body.dark-mode .dashboardBtn {
+    background: linear-gradient(90deg, #2c3e50, #34495e);
+  }
+  body.dark-mode .addBtn {
+    background: linear-gradient(90deg, #009688, #1976d2);
+  }
+  body.dark-mode .deleteBtn,
+  body.dark-mode .updateBtn {
+    background: linear-gradient(90deg, #b71c1c, #616161);
+    color: #fff;
+  }
+  body.dark-mode .logoutBtn {
+    background: linear-gradient(90deg, #222, #555);
+  }
+  body.dark-mode .filterBtn {
+    background: linear-gradient(90deg, #7f399f, #2980b9);
+  }
+  body.dark-mode .page {
+    background: rgba(28, 28, 30, 0.96);
+    color: #f1f1f1;
+    box-shadow: 0 8px 32px rgba(10, 10, 20, 0.28);
+  }
+  body.dark-mode h2 {
+    color: #e0e0e0;
+  }
+  body.dark-mode input,
+  body.dark-mode select {
+    background: #222326;
+    color: #eaeaea;
+    border: 1px solid #333;
+  }
+  body.dark-mode input:focus,
+  body.dark-mode select:focus {
+    border: 2px solid #00c9b7;
+    background: #232226;
+  }
+  body.dark-mode .alert.success {
+    background: #212f3d;
+    color: #48dbfb;
+    box-shadow: 0 0 10px #2980b9;
+  }
+  body.dark-mode .alert.error {
+    background: #543030;
+    color: #ff7675;
+    box-shadow: 0 0 8px #e74c3c;
+  }
+  body.dark-mode table {
+    background: #333;
+    color: #f5f5f5;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.14);
+  }
+  body.dark-mode th {
+    background: linear-gradient(90deg, #34495e 0%, #232526 100%);
+    color: #fff;
+  }
+  body.dark-mode td:first-child {
+    color: #60dabf;
+  }
+  body.dark-mode tbody tr:nth-child(odd) {
+    background: #292a2e;
+  }
+  body.dark-mode tbody tr:nth-child(even) {
+    background: #232428;
+  }
+  body.dark-mode .login-logo {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  }
+  body.dark-mode .form-group i {
+    color: #60dabf;
+  }
+</style>
+</head>
+<body>
+<!-- Theme toggle floating button -->
+<button id="themeToggleBtn" aria-label="Toggle dark/light mode">
+  <i class="fas fa-moon"></i>
+</button>
+
+<!-- NAVBAR -->
+<header id="navbar" style="display: none">
+  <h1>
+    <img src="image1.png" alt="Logo" class="nav-logo" />
+    Contact Manager
+  </h1>
+  <nav>
+    <button class="dashboardBtn" onclick="showPage('dashboard'); loadContacts();">
+      <i class="fas fa-table"></i> Dashboard
+    </button>
+    <button class="addBtn" onclick="showPage('addContact');">
+      <i class="fas fa-user-plus"></i> Add
+    </button>
+    <button class="deleteBtn" onclick="showPage('deleteContact');">
+      <i class="fas fa-user-minus"></i> Delete
+    </button>
+    <button class="updateBtn" onclick="showPage('updateContact');">
+      <i class="fas fa-user-edit"></i> Update
+    </button>
+    <button class="filterBtn" onclick="showPage('filterContact');">
+      <i class="fas fa-filter"></i> Filter
+    </button>
+    <button class="logoutBtn" onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </nav>
+</header>
+
+<!-- LOGIN PAGE -->
+<div class="login-container">
+  <div id="login" class="page active" style="margin-top: 120px; max-width: 400px; text-align: center">
+    <h2><i class="fa-solid fa-circle-user"></i> Login</h2>
+    <div class="form-group">
+      <i class="fas fa-envelope"></i><input type="text" id="email" placeholder="Email" />
+    </div>
+  <div class="form-group">
+    <i class="fas fa-lock"></i><input type="password" id="password" placeholder="Password" />
+  </div>
+  <button style="background: #6a11cb" onclick="login()">
+    <i class="fas fa-arrow-right"></i> Login
+  </button>
+  <p id="loginMessage" class="alert error"></p>
+</div>
+
+<!-- DASHBOARD PAGE -->
+<div id="dashboard" class="page">
+  <h2><i class="fas fa-table icon-title"></i> Dashboard</h2>
+  <p style="text-align: center; color: #4b4b4b; font-size: 1.02em">
+    <i class="fas fa-users"></i> Realtime Contact List
+  </p>
+  <div style="margin-bottom: 12px; text-align: center;">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="🔍 Search contacts..."
+      style="padding:10px; width:60%; max-width:400px; border-radius:6px; border:1px solid #ccc;"
+    />
+  </div>
+  <table id="contactTable">
+    <thead>
+      <tr>
+        <th data-col="id">🔑 ID</th>
+        <th data-col="name">👤 Name</th>
+        <th data-col="phone">☎️ Phone</th>
+        <th data-col="email">✉️ Email</th>
+        <th data-col="address">🏠 Address</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<!-- FILTER CONTACT PAGE -->
+<div id="filterContact" class="page">
+  <h2><i class="fas fa-filter icon-title"></i> Filter Contacts</h2>
+
+  <div class="form-group">
+    <i class="fas fa-sort"></i>
+    <select id="filterBy">
+      <option value="id">By ID</option>
+      <option value="name">By Name</option>
+      <option value="phone">By Phone</option>
+      <option value="email">By Email</option>
+      <option value="address">By Address</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <i class="fas fa-search"></i><input type="text" id="filterValue" placeholder="Enter filter value..." />
+  </div>
+
+  <button class="dashboardBtn" onclick="applyFilter()">
+    <i class="fas fa-search"></i> Apply Filter
+  </button>
+
+  <table id="filterTable">
+    <thead>
+      <tr>
+        <th>🔑 ID</th>
+        <th>👤 Name</th>
+        <th>☎️ Phone</th>
+        <th>✉️ Email</th>
+        <th>🏠 Address</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<!-- ADD CONTACT PAGE -->
+<div id="addContact" class="page">
+  <h2><i class="fas fa-user-plus icon-title"></i> Add Contact</h2>
+  <div class="form-group">
+    <i class="fas fa-hashtag"></i><input type="number" id="addId" placeholder="ID" />
+  </div>
+  <div class="form-group">
+    <i class="fas fa-user"></i><input type="text" id="addName" placeholder="Name" />
+  </div>
+  <div class="form-group">
+    <i class="fas fa-phone"></i><input type="tel" id="addPhone" placeholder="Phone" />
+  </div>
+  <div class="form-group">
+    <i class="fas fa-envelope"></i><input type="email" id="addEmail" placeholder="Email" />
+  </div>
+  <div class="form-group">
+    <i class="fas fa-home"></i><input type="text" id="addAddress" placeholder="Address" />
+  </div>
+  <button class="addBtn" onclick="addContact()"><i class="fas fa-plus-circle"></i> Add Contact</button>
+  <p id="addMessage" class="alert"></p>
+</div>
+
+<!-- DELETE CONTACT PAGE -->
+<div id="deleteContact" class="page">
+  <h2><i class="fas fa-user-minus icon-title"></i> Delete Contact</h2>
+  <div class="form-group">
+    <i class="fas fa-sort"></i>
+    <select id="deleteBy">
+      <option value="id">By ID</option>
+      <option value="name">By Name</option>
+      <option value="phone_number">By Phone</option>
+      <option value="email">By Email</option>
+      <option value="address">By Address</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <i class="fas fa-search"></i><input type="text" id="deleteValue" placeholder="Enter value to delete" />
+  </div>
+  <button class="deleteBtn" onclick="deleteContact()"><i class="fas fa-trash-alt"></i> Delete</button>
+  <p id="deleteMessage" class="alert"></p>
+</div>
+
+<!-- UPDATE CONTACT PAGE -->
+<div id="updateContact" class="page">
+  <h2><i class="fas fa-user-edit icon-title"></i> Update Contact</h2>
+  <div class="form-group">
+    <i class="fas fa-sort"></i>
+    <select id="updateBy">
+      <option value="id">By ID</option>
+      <option value="name">By Name</option>
+      <option value="phone_number">By Phone</option>
+      <option value="email">By Email</option>
+      <option value="address">By Address</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <i class="fas fa-search"></i><input type="text" id="updateValue" placeholder="Enter value to update" />
+  </div>
+  <div class="form-group">
+    <i class="fas fa-user"></i><input type="text" id="updateName" placeholder="New Name" />
+  </div>
+  <div class="form-group">
+    <i class="fas fa-phone"></i><input type="tel" id="updatePhone" placeholder="New Phone" />
+  </div>
+  <div class="form-group">
+    <i class="fas fa-envelope"></i><input type="email" id="updateEmail" placeholder="New Email" />
+  </div>
+  <div class="form-group">
+    <i class="fas fa-home"></i><input type="text" id="updateAddress" placeholder="New Address" />
+  </div>
+  <button class="updateBtn" onclick="updateContact()"><i class="fas fa-sync-alt"></i> Update</button>
+  <p id="updateMessage" class="alert"></p>
+</div>
+
+<script>
+  const navbar = document.getElementById("navbar");
+
+  function showPage(pageId) {
+    document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
+    const page = document.getElementById(pageId);
+    page.classList.add("active");
+    const firstInput = page.querySelector("input, select, textarea");
+    if (firstInput) firstInput.focus();
+  }
+
+  function login() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const msg = document.getElementById("loginMessage");
+    if (email === "pawarparth233@gmail.com" && password === "parth") {
+      msg.style.display = "none";
+      navbar.style.display = "flex";
+      showPage("dashboard");
+      loadContacts();
+    } else {
+      msg.textContent = "❌ You are not able to access the application";
+      msg.style.display = "block";
+    }
+  }
+
+  function logout() {
+    navbar.style.display = "none";
+    showPage("login");
+    document.getElementById("email").value = "";
+    document.getElementById("password").value = "";
+  }
+
+  function validateEmail(email) {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  }
+
+  function validatePhone(phone) {
+    const phonePattern = /^\d{10}$/;
+    return phonePattern.test(phone);
+  }
+
+  function loadContacts() {
+    fetch("http://localhost:9090/allContacts")
+      .then((res) => res.json())
+      .then((data) => {
+        const tbody = document.getElementById("contactTable").querySelector("tbody");
+        tbody.innerHTML = "";
+        data.forEach((c) => {
+          tbody.innerHTML += `<tr>
+              <td>🔑 ${c.id}</td>
+              <td>👤 ${c.name}</td>
+              <td>☎️ ${c.phone}</td>
+              <td>✉️ ${c.email}</td>
+              <td>🏠 ${c.address}</td>
+            </tr>`;
+        });
+        const searchInput = document.getElementById("searchInput");
+        if (searchInput) searchInput.value = "";
+      })
+      .catch((err) => console.error(err));
+  }
+
+  function addContact() {
+    const id = document.getElementById("addId").value.trim();
+    const name = document.getElementById("addName").value.trim();
+    const phone = document.getElementById("addPhone").value.trim();
+    const email = document.getElementById("addEmail").value.trim();
+    const address = document.getElementById("addAddress").value.trim();
+    const msg = document.getElementById("addMessage");
+
+    if (!id || !name || !phone) {
+      msg.textContent = "⚠️ ID, Name, and Phone are required!";
+      msg.className = "alert error";
+      msg.style.display = "block";
+      return;
+    }
+    if (email && !validateEmail(email)) {
+      msg.textContent = "⚠️ Invalid Email address!";
+      msg.className = "alert error";
+      msg.style.display = "block";
+      return;
+    }
+    if (phone && !validatePhone(phone)) {
+      msg.textContent = "⚠️ Invalid Phone number! (Must be 10 digits)";
+      msg.className = "alert error";
+      msg.style.display = "block";
+      return;
+    }
+
+    fetch("http://localhost:9090/addContact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, name, phone, email, address }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        msg.textContent = `✅ ${data.message}`;
+        msg.className = "alert success";
+        msg.style.display = "block";
+        document.getElementById("addId").value = "";
+        document.getElementById("addName").value = "";
+        document.getElementById("addPhone").value = "";
+        document.getElementById("addEmail").value = "";
+        document.getElementById("addAddress").value = "";
+        document.getElementById("addId").focus();
+        loadContacts();
+      })
+      .catch(() => {
+        msg.textContent = "❌ Error adding contact";
+        msg.className = "alert error";
+        msg.style.display = "block";
+      });
+  }
+
+  function deleteContact() {
+    const by = document.getElementById("deleteBy").value;
+    const val = document.getElementById("deleteValue").value.trim();
+    const msg = document.getElementById("deleteMessage");
+    if (!val) {
+      msg.textContent = "⚠️ Enter value to delete!";
+      msg.className = "alert error";
+      msg.style.display = "block";
+      return;
+    }
+    fetch("http://localhost:9090/deleteContact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ by, value: val }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          msg.textContent = "✅ Deleted successfully!";
+          msg.className = "alert success";
+          document.getElementById("deleteValue").value = "";
+          document.getElementById("deleteValue").focus();
+          loadContacts();
+        } else {
+          msg.textContent = "❌ Contact not found!";
+          msg.className = "alert error";
+        }
+        msg.style.display = "block";
+      })
+      .catch(() => {
+        msg.textContent = "❌ Error deleting contact";
+        msg.className = "alert error";
+        msg.style.display = "block";
+      });
+  }
+
+  function updateContact() {
+    const by = document.getElementById("updateBy").value;
+    const val = document.getElementById("updateValue").value.trim();
+    const name = document.getElementById("updateName").value.trim();
+    const phone = document.getElementById("updatePhone").value.trim();
+    const email = document.getElementById("updateEmail").value.trim();
+    const address = document.getElementById("updateAddress").value.trim();
+    const msg = document.getElementById("updateMessage");
+    if (!val) {
+      msg.textContent = "⚠️ Enter value to update!";
+      msg.className = "alert error";
+      msg.style.display = "block";
+      return;
+    }
+    if (email && !validateEmail(email)) {
+      msg.textContent = "⚠️ Invalid Email address!";
+      msg.className = "alert error";
+      msg.style.display = "block";
+      return;
+    }
+    if (phone && !validatePhone(phone)) {
+      msg.textContent = "⚠️ Invalid Phone number! (Must be 10 digits)";
+      msg.className = "alert error";
+      msg.style.display = "block";
+      return;
+    }
+    fetch("http://localhost:9090/updateContact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ by, value: val, name, phone, email, address }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          msg.textContent = "✅ Updated successfully!";
+          msg.className = "alert success";
+          msg.style.display = "block";
+          document.getElementById("updateValue").value = "";
+          document.getElementById("updateName").value = "";
+          document.getElementById("updatePhone").value = "";
+          document.getElementById("updateEmail").value = "";
+          document.getElementById("updateAddress").value = "";
+          document.getElementById("updateValue").focus();
+          loadContacts();
+        } else {
+          msg.textContent = "❌ Contact not found!";
+          msg.className = "alert error";
+          msg.style.display = "block";
+        }
+      })
+      .catch(() => {
+        msg.textContent = "❌ Error updating contact";
+        msg.className = "alert error";
+        msg.style.display = "block";
+      });
+  }
+
+  // Search filter for table rows (global search)
+  document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("searchInput");
+    searchInput?.addEventListener("input", function () {
+      const filter = this.value.toLowerCase();
+      const rows = document.querySelectorAll("#contactTable tbody tr");
+      rows.forEach((row) => {
+        const rowText = Array.from(row.cells)
+          .map((cell) => cell.textContent.toLowerCase())
+          .join(" ");
+        row.style.display = rowText.includes(filter) ? "" : "none";
+      });
+    });
+
+    // Sorting functionality on headers
+    let sortDirection = {};
+
+    document.querySelectorAll("#contactTable th").forEach((th) => {
+      th.addEventListener("click", () => {
+        const col = th.dataset.col;
+        const tbody = document.querySelector("#contactTable tbody");
+        const rowsArray = Array.from(tbody.querySelectorAll("tr"));
+
+        // Toggle sort direction for this column
+        sortDirection[col] = !sortDirection[col];
+
+        // Remove sort classes from all headers
+        document.querySelectorAll("#contactTable th").forEach((h) => {
+          h.classList.remove("sort-asc", "sort-desc");
+        });
+        // Add sort class to current header
+        th.classList.add(sortDirection[col] ? "sort-asc" : "sort-desc");
+
+        rowsArray.sort((rowA, rowB) => {
+          let cellA = rowA.querySelector(`td:nth-child(${th.cellIndex + 1})`).textContent.trim();
+          let cellB = rowB.querySelector(`td:nth-child(${th.cellIndex + 1})`).textContent.trim();
+
+          if (col === "id") {
+            // Numeric sort
+            cellA = parseInt(cellA.replace(/[^\d]/g, "")) || 0;
+            cellB = parseInt(cellB.replace(/[^\d]/g, "")) || 0;
+            return sortDirection[col] ? cellA - cellB : cellB - cellA;
+          } else {
+            // String sort
+            return sortDirection[col]
+              ? cellA.localeCompare(cellB)
+              : cellB.localeCompare(cellA);
+          }
+        });
+        rowsArray.forEach((row) => tbody.appendChild(row));
+      });
+    });
+  });
+
+  // Filter module functionality
+  function applyFilter() {
+    const by = document.getElementById("filterBy").value;
+    const value = document.getElementById("filterValue").value.trim().toLowerCase();
+
+    fetch("http://localhost:9090/allContacts")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById("filterTable").querySelector("tbody");
+        tbody.innerHTML = "";
+
+        const filtered = data.filter(c => {
+          if (c[by] === null || c[by] === undefined) return false;
+          return String(c[by]).toLowerCase().includes(value);
+        });
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">❌ No results found</td></tr>`;
+        } else {
+          filtered.forEach(c => {
+            tbody.innerHTML += `
+              <tr>
+                <td>🔑 ${c.id}</td>
+                <td>👤 ${c.name}</td>
+                <td>☎️ ${c.phone}</td>
+                <td>✉️ ${c.email}</td>
+                <td>🏠 ${c.address}</td>
+              </tr>`;
+          });
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        const tbody = document.getElementById("filterTable").querySelector("tbody");
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">❌ Error fetching data</td></tr>`;
+      });
+  }
+
+  // Theme toggle logic
+  function setThemeIcon(isDark) {
+    const btn = document.getElementById("themeToggleBtn");
+    btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+  }
+  function toggleTheme() {
+    const body = document.body;
+    const isDark = !body.classList.contains("dark-mode");
+    body.classList.toggle("dark-mode", isDark);
+    setThemeIcon(isDark);
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  }
+  window.addEventListener("DOMContentLoaded", () => {
+    const theme = localStorage.getItem("theme");
+    const body = document.body;
+    const isDark = theme === "dark";
+    body.classList.toggle("dark-mode", isDark);
+    setThemeIcon(isDark);
+
+    var themeBtn = document.getElementById("themeToggleBtn");
+    themeBtn.addEventListener("click", toggleTheme);
+  });
+</script>
+</body>
+</html>
